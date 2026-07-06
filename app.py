@@ -4,6 +4,9 @@ import numpy as np
 import joblib
 import requests
 from datetime import datetime
+from zoneinfo import ZoneInfo
+
+KAMPALA_TZ = ZoneInfo("Africa/Kampala")
 import os
 
 # --- Page Config & Styling ---
@@ -192,11 +195,11 @@ st.sidebar.markdown("### ⏳ Time Selection")
 use_current_time = st.sidebar.checkbox("Use Current Local Time", value=True)
 
 if use_current_time:
-    selected_time = datetime.now()
-    st.sidebar.info(f"Using time: {selected_time.strftime('%Y-%m-%d %H:%M')}")
+    selected_time = datetime.now(KAMPALA_TZ)
+    st.sidebar.info(f"Using time: {selected_time.strftime('%Y-%m-%d %H:%M')} (EAT)")
 else:
-    t_date = st.sidebar.date_input("Select Date", datetime.now())
-    t_time = st.sidebar.time_input("Select Time", datetime.now())
+    t_date = st.sidebar.date_input("Select Date", datetime.now(KAMPALA_TZ))
+    t_time = st.sidebar.time_input("Select Time", datetime.now(KAMPALA_TZ))
     selected_time = datetime.combine(t_date, t_time)
 
 sin_minute, cos_minute, sin_day, cos_day = get_time_features(selected_time)
